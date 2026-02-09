@@ -6,6 +6,10 @@ import enums.Status;
 import java.time.LocalDate;
 
 public class Tarefa {
+    private static int contador = 0;
+
+
+    private final int id;
     private String nome;
     private String descricao;
     private LocalDate dataCriacao;
@@ -14,10 +18,11 @@ public class Tarefa {
     private Categoria categoria;
     private Status status;
 
-    public Tarefa(String nome, String descricao, LocalDate dataTermino, Prioridade prioridade, Categoria categoria, Status status) {
+    public Tarefa(String nome, String descricao, LocalDate dataCriacao, LocalDate dataTermino, Prioridade prioridade, Categoria categoria, Status status) {
+        this.id = ++contador;
         this.nome = nome;
         this.descricao = descricao;
-        this.dataCriacao = LocalDate.now();
+        this.dataCriacao = dataCriacao;
         this.dataTermino = dataTermino;
         this.prioridade = prioridade;
         this.categoria = categoria;
@@ -25,12 +30,31 @@ public class Tarefa {
     }
 
     public Tarefa(String nome, Prioridade prioridade) {
+        this.id = ++contador;
         this.nome = nome;
         this.prioridade = prioridade;
     }
 
-    public String printInfoTarefa(){
-        return "Nome: " + this.nome + ", Prioridade: " + this.prioridade.toString();
+    public void printTarefaEsp(){
+        System.out.println();
+        System.out.println("Detalhes tarefa: ");
+        System.out.println("Id: " + this.id);
+        System.out.println("Nome/Titulo: " + this.nome);
+        System.out.println("Descrição: " +this.descricao);
+        System.out.println("Data criação: " +this.dataCriacao.toString());
+        System.out.println("Data termino: " +this.dataTermino.toString());
+        System.out.println("Prioridade: " +this.prioridade.toString());
+        System.out.println("Categoria: " +this.categoria.toString());
+        System.out.println("Status: " +this.status.toString());
+        System.out.println();
+    }
+
+    public String stringInfoTarefa(){
+        return "Id: " + this.id + ", Nome: " + this.nome + ", Prioridade: " + this.prioridade.toString();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNome() {

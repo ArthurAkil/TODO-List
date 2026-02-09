@@ -1,5 +1,5 @@
 package enums;
 
 public enum Categoria {
-    URGENTE, NAO_URGENTE
+    TRABALHO, ESTUDO, PESSOAL, FINANCEIRO
 }
