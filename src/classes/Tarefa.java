@@ -4,10 +4,10 @@ import enums.Categoria;
 import enums.Prioridade;
 import enums.Status;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Tarefa {
     private static int contador = 0;
-
 
     private final int id;
     private String nome;
@@ -18,21 +18,15 @@ public class Tarefa {
     private Categoria categoria;
     private Status status;
 
-    public Tarefa(String nome, String descricao, LocalDate dataCriacao, LocalDate dataTermino, Prioridade prioridade, Categoria categoria, Status status) {
+    public Tarefa(String nome, String descricao, LocalDate dataTermino, Prioridade prioridade, Categoria categoria, Status status) {
         this.id = ++contador;
         this.nome = nome;
         this.descricao = descricao;
-        this.dataCriacao = dataCriacao;
+        this.dataCriacao = LocalDate.now();
         this.dataTermino = dataTermino;
         this.prioridade = prioridade;
         this.categoria = categoria;
         this.status = status;
-    }
-
-    public Tarefa(String nome, Prioridade prioridade) {
-        this.id = ++contador;
-        this.nome = nome;
-        this.prioridade = prioridade;
     }
 
     public void printTarefaEsp(){
@@ -50,7 +44,8 @@ public class Tarefa {
     }
 
     public String stringInfoTarefa(){
-        return "Id: " + this.id + ", Nome: " + this.nome + ", Prioridade: " + this.prioridade.toString();
+        DateTimeFormatter dataFormatada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return "Id: " + this.id + ", Nome: " + this.nome + ", Prioridade: " + this.prioridade.toString() + ", Data de encerramento: " +this.dataTermino.format(dataFormatada);
     }
 
     public int getId() {
