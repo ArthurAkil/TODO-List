@@ -29,9 +29,6 @@ public class MenuControle {
         switch (escolha) {
             case 1:
                 segundoMenu(tarefas);
-
-                // resto...
-
                 break;
             case 2:
                 this.app = false;
@@ -64,16 +61,18 @@ public class MenuControle {
                 System.out.println("Digite o id específico da tarefa que você deseja ver: ");
                 int escolhaIndice = sc.nextInt();
                 tarefas.verTarefa(escolhaIndice);
-
                 break;
             case 2:
-                System.out.println("Digite o id da tarefa que deseja excluir: ");
+                System.out.println("Digite o id da tarefa que deseja editar: ");
                 int idEditar = sc.nextInt();
                 sc.nextLine();
                 menuEditar(tarefas, idEditar);
                 break;
 
             case 3:
+                System.out.println("Vamos criar a tarefa: ");
+                menuCriar(tarefas);
+                break;
             case 4:
                 System.out.println("Digite o id da tarefa que você deseja excluir: ");
                 int idExcluir = sc.nextInt();
@@ -81,9 +80,36 @@ public class MenuControle {
                 tarefas.removerTarefa(idExcluir);
                 System.out.println("Se existiu alguma tarefa com aquela id, foi deletado com sucesso.");
                 break;
-
         }
+    }
 
+    public void menuCriar(ConjuntoTarefas tarefas){
+        System.out.println("Para criar uma tarefa nova vamos definir seus atributos: ");
+            try{
+                System.out.println("Defina o nome da sua tarefa: ");
+                String nome = sc.nextLine();
+
+                System.out.println("Defina a descrição da tarefa: ");
+                String descricao = sc.nextLine();
+
+                System.out.println("Defina a data de encerramento da tarefa. Exemplo 02/01/2029: ");
+                LocalDate termino = transformarData();
+
+                System.out.println("Defina a prioridade: ");
+                Prioridade prioridade = prioridadeEscolhida();
+
+                System.out.println("Defina a categoria: ");
+                Categoria categoria = categoriaEscolhida();
+
+                System.out.println("Defina o status: ");
+                Status status = statusEscolhida();
+
+                Tarefa t = new Tarefa(nome, descricao, termino, prioridade, categoria, status);
+
+                tarefas.getTarefas().add(t);
+            } catch (Exception e){
+                System.out.println("Ops, algo deu errado, tente novamente.");
+            }
     }
 
     public void menuEditar(ConjuntoTarefas tarefas, int id){
@@ -137,7 +163,6 @@ public class MenuControle {
         tarefas.getTarefas().add(t);
         System.out.println("Tarefa atualizada");
     }
-
 
     public List<Tarefa> menuFiltragem(ConjuntoTarefas tarefas) {
         System.out.println("Pelo o que você prefere filtrar sua lista de tarefas: [1] - Categoria / [2] - Prioridade / [3] - Status / [4] - Nenhuma (ver lista completa)");
