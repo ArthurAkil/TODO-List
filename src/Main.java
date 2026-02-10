@@ -1,26 +1,39 @@
 import classes.ConjuntoTarefas;
+import classes.MenuControle;
 import classes.Tarefa;
+import enums.Categoria;
 import enums.Prioridade;
+import enums.Status;
+
+import java.time.LocalDate;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-
-        Tarefa t1 = new Tarefa("Tarefa1", Prioridade.MUITO_BAIXA);
-        Tarefa t2 = new Tarefa("Tarefa2",Prioridade.BAIXA);
-        Tarefa t3 = new Tarefa("Tarefa3",Prioridade.MEDIA);
-        Tarefa t4 = new Tarefa("Tarefa4",Prioridade.ALTA);
-        Tarefa t5 = new Tarefa("Tarefa5",Prioridade.MUITO_ALTA);
-
         ConjuntoTarefas conjunto = new ConjuntoTarefas();
 
-        conjunto.adicionarTarefa(t1);
-        conjunto.adicionarTarefa(t2);
-        conjunto.adicionarTarefa(t3);
-        conjunto.adicionarTarefa(t4);
-        conjunto.adicionarTarefa(t5);
+        conjunto.adicionarTarefa(new Tarefa(
+                "Estudar Java",
+                "Revisar Collections e Streams",
+                LocalDate.of(2026, 2, 15),
+                Prioridade.ALTA,
+                Categoria.ESTUDO,
+                Status.TODO
+        ));
 
-        conjunto.listarTarefas();
+        conjunto.adicionarTarefa(new Tarefa(
+                "Projeto tarefas",
+                "Implementar CRUD no terminal",
+                LocalDate.of(2026, 2, 20),
+                Prioridade.MUITO_ALTA,
+                Categoria.TRABALHO,
+                Status.DOING
+        ));
+
+        MenuControle menu = new MenuControle();
+        menu.iniciar(conjunto);
+
     }
 }
