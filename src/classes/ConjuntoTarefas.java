@@ -5,6 +5,7 @@ import enums.Categoria;
 import enums.Prioridade;
 import enums.Status;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
@@ -15,6 +16,36 @@ public class ConjuntoTarefas {
             .reversed()
             .thenComparing((Tarefa t) -> t.getId()));
 
+    public void salvarTarefas(String caminho){
+        try(BufferedWriter escreva = new BufferedWriter(new FileWriter(caminho))){
+            for (Tarefa tarefa : tarefas){
+                escreva.write(
+                        tarefa.getId() + ";" + tarefa.getNome() + ";" + tarefa.getDescricao() + ";" + tarefa.getDataTermino() + ";" + tarefa.getPrioridade() + ";" +tarefa.getCategoria() + ";" + tarefa.getStatus() + ";" + tarefa.getDataCriacao()
+                );
+                escreva.newLine();
+                }
+            } catch (IOException e) {
+            System.out.println("Erro ao salvar aquivo" + e.getMessage());
+        }
+    }
+
+    public void carregarTarefas(String caminho){
+        try(BufferedReader leia = new BufferedReader(new FileReader(caminho))){
+            String linha;
+
+            while((linha = leia.readLine()) != null){
+                String[] atributos = linha.split(";");
+
+                Tarefa tarefa = new Tarefa(atributos[1], atributos[2], LocalDate.parse(atributos[3]), Prioridade.valueOf(atributos[4]), Categoria.valueOf(atributos[5]), Status.valueOf(atributos[6]));
+
+                tarefa.setDataCriacao(LocalDate.parse(atributos[7]));
+
+                tarefas.add(tarefa);
+            }
+        } catch (IOException e){
+            System.out.println("Erro ao carregar arquivo" + e.getMessage());
+        }
+    }
 
     public void adicionarTarefa(Tarefa t){
         this.tarefas.add(t);

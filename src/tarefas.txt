@@ -1,0 +1,2 @@
+1;Estudar trilhas da ZG;Terminar o curso java com estilo e com dor de cabeça do projeto final da trilha;2026-02-10;MUITO_ALTA;ESTUDO;DONE;2026-02-10
+2;Estudar Java;Revisar Collections e Streams;2026-02-15;ALTA;ESTUDO;TODO;2026-02-10

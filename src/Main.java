@@ -14,26 +14,12 @@ public class Main {
     public static void main(String[] args) {
         ConjuntoTarefas conjunto = new ConjuntoTarefas();
 
-        conjunto.adicionarTarefa(new Tarefa(
-                "Estudar Java",
-                "Revisar Collections e Streams",
-                LocalDate.of(2026, 2, 15),
-                Prioridade.ALTA,
-                Categoria.ESTUDO,
-                Status.TODO
-        ));
-
-        conjunto.adicionarTarefa(new Tarefa(
-                "Projeto tarefas",
-                "Implementar CRUD no terminal",
-                LocalDate.of(2026, 2, 20),
-                Prioridade.MUITO_ALTA,
-                Categoria.TRABALHO,
-                Status.DOING
-        ));
+        conjunto.carregarTarefas("src/tarefas.txt");
 
         MenuControle menu = new MenuControle();
         menu.iniciar(conjunto);
+
+        conjunto.salvarTarefas("src/tarefas.txt");
 
     }
 }
