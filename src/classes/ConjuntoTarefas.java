@@ -28,6 +28,15 @@ public class ConjuntoTarefas {
 
     }
 
+    public Tarefa buscarId(int id){
+        for (Tarefa t : tarefas){
+            if (t.getId() == id){
+                return t;
+            }
+        }
+        return null;
+    }
+
     public List<Tarefa> filtrarCategoria(Categoria c){
         return tarefas.stream()
                 .filter(tarefa -> tarefa.getCategoria() == c)

@@ -4,6 +4,9 @@ import enums.Categoria;
 import enums.Prioridade;
 import enums.Status;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,9 +30,7 @@ public class MenuControle {
             case 1:
                 segundoMenu(tarefas);
 
-
                 // resto...
-
 
                 break;
             case 2:
@@ -49,6 +50,7 @@ public class MenuControle {
         List<Tarefa> listaFinal =  menuOrdenacao(listaBase);
         tarefas.listarTarefas(listaFinal);
 
+        menuCrud(tarefas);
     }
 
     public void menuCrud(ConjuntoTarefas tarefas){
@@ -62,25 +64,95 @@ public class MenuControle {
                 System.out.println("Digite o id específico da tarefa que você deseja ver: ");
                 int escolhaIndice = sc.nextInt();
                 tarefas.verTarefa(escolhaIndice);
+
                 break;
             case 2:
+                System.out.println("Digite o id da tarefa que deseja excluir: ");
+                int idEditar = sc.nextInt();
+                sc.nextLine();
+                menuEditar(tarefas, idEditar);
+                break;
+
+            case 3:
+            case 4:
+                System.out.println("Digite o id da tarefa que você deseja excluir: ");
+                int idExcluir = sc.nextInt();
+                sc.nextLine();
+                tarefas.removerTarefa(idExcluir);
+                System.out.println("Se existiu alguma tarefa com aquela id, foi deletado com sucesso.");
+                break;
 
         }
 
     }
 
+    public void menuEditar(ConjuntoTarefas tarefas, int id){
+        Tarefa t = tarefas.buscarId(id);
+
+        if (t == null){
+            System.out.println("Tarefa não encontrada");
+            return;
+        }
+
+        System.out.println("O que deseja editar dessa tarefa: [1] - Nome / [2] - Descrição / [3] - Data de término / [4] - Prioridade / [5] - Categoria / [6] - Status / [0] - Voltar");
+        int editEscolha = sc.nextInt();
+        sc.nextLine();
+
+        tarefas.getTarefas().remove(t);
+        switch (editEscolha){
+            case 1:
+                System.out.println("Novo nome: ");
+                String nomeNovo = sc.nextLine();
+                t.setNome(nomeNovo);
+                break;
+            case 2:
+                System.out.println("Descrição nova: ");
+                String descricaoNova = sc.nextLine();
+                t.setDescricao(descricaoNova);
+                break;
+            case 3:
+                System.out.println("Digite a nova data no formato 'dia/mes/ano': ");
+                t.setDataTermino(transformarData());
+                break;
+            case 4:
+                System.out.println("Escolha a nova prioridade: ");
+                t.setPrioridade(prioridadeEscolhida());
+                break;
+            case 5:
+                System.out.println("Escolha a nova categoria: ");
+                t.setCategoria(categoriaEscolhida());
+                break;
+            case 6:
+                System.out.println("Escolha o novo status: ");
+                t.setStatus(statusEscolhida());
+                break;
+            case 0:
+                System.out.println("Voltando sem alterações");
+                tarefas.getTarefas().add(t);
+                return;
+            default:
+                System.out.println("Opção inválida");
+                break;
+        }
+        tarefas.getTarefas().add(t);
+        System.out.println("Tarefa atualizada");
+    }
+
+
     public List<Tarefa> menuFiltragem(ConjuntoTarefas tarefas) {
         System.out.println("Pelo o que você prefere filtrar sua lista de tarefas: [1] - Categoria / [2] - Prioridade / [3] - Status / [4] - Nenhuma (ver lista completa)");
         int escolhaFiltro = sc.nextInt();
         sc.nextLine();
-        List<Tarefa> listaFiltrada;
 
         switch (escolhaFiltro) {
             case 1:
+                System.out.println("Escolha uma das categorias que deseja filtrar: ");
                 return tarefas.filtrarCategoria(categoriaEscolhida());
             case 2:
+                System.out.println("Escolha uma das prioridades que deseja filtrar: ");
                 return tarefas.filtrarPrioridade(prioridadeEscolhida());
             case 3:
+                System.out.println("Escolha um dos status que deseja filtrar: ");
                 return tarefas.filtrarStatus(statusEscolhida());
             default:
                 return new ArrayList<>(tarefas.getTarefas());
@@ -92,7 +164,6 @@ public class MenuControle {
 
         int escolhaOrdenacao = sc.nextInt();
         sc.nextLine();
-
         switch (escolhaOrdenacao){
             case 1:
                 return lista.stream().sorted(Comparator.comparing(tarefa -> tarefa.getDataCriacao())).toList();
@@ -104,9 +175,23 @@ public class MenuControle {
         }
     }
 
+    public LocalDate transformarData(){
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        while(true){
+            String data = sc.nextLine().trim();
+
+            try{
+                return LocalDate.parse(data, formato);
+            } catch (DateTimeParseException e){
+                System.out.println("Digite a data no formato correto, ex: 09/02/2020");
+            }
+        }
+    }
+
     public Categoria categoriaEscolhida() {
         while (true){
-            System.out.println("Vamos filtrar por determinada categoria então, qual categoria deseja escolher? [1] - Trabalho / [2] - Estudo / [3] - Pessoal / [4] - Financeiro");
+            System.out.println("[1] - Trabalho / [2] - Estudo / [3] - Pessoal / [4] - Financeiro");
             int escolhaCategoria = sc.nextInt();
             sc.nextLine();
             switch (escolhaCategoria) {
@@ -126,7 +211,7 @@ public class MenuControle {
 
     public Prioridade prioridadeEscolhida() {
         while (true){
-            System.out.println("Vamos filtrar por determinada prioridade então, qual prioridade deseja escolher? [1] - Muito Baixa / [2] - Baixa / [3] - Media / [4] - Alta / [5] - Muito alta");
+            System.out.println("[1] - Muito Baixa / [2] - Baixa / [3] - Media / [4] - Alta / [5] - Muito alta");
             int escolhaPrioridade = sc.nextInt();
             sc.nextLine();
             switch (escolhaPrioridade) {
@@ -148,7 +233,7 @@ public class MenuControle {
 
     public Status statusEscolhida() {
         while (true){
-            System.out.println("Vamos filtrar por determinado status então, qual status deseja escolher? [1] - TODO / [2] - DOING / [3] - DONE ");
+            System.out.println("[1] - TODO / [2] - DOING / [3] - DONE ");
             int escolhaStatus = sc.nextInt();
             sc.nextLine();
             switch (escolhaStatus) {
@@ -163,7 +248,4 @@ public class MenuControle {
             }
         }
     }
-
-
-
 }
